@@ -1,5 +1,6 @@
 import requests as r
 import sqlite3
+import json
 
 DB_PATH = "database.db"
 
@@ -53,8 +54,19 @@ def update_teams(conn: sqlite3.Connection, cur: sqlite3.Cursor):
     conn.close()
 
 
+def update_players(conn: sqlite3.Connection, cur: sqlite3.Cursor):
+    url = 'https://feeds.incrowdsports.com/provider/euroleague-feeds/v2/competitions/E/seasons/E2025/people?personType=J&Limit=24&Offset=0&active=true&search=&sortBy=name'
+    resp = r.get(url)
+    print(json.dumps(resp.json(), indent=4))
+    for player in resp.json()['data']:
+        player = player['person']
+        first_name = player['passportName']
+        last_name = player['passportSurname']
+        
+
 if __name__ == "__main__":
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     update_teams(conn, cur)
+    update_players(conn, cur)
     print("Teams updated.")
