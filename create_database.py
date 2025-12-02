@@ -17,12 +17,14 @@ CREATE TABLE IF NOT EXISTS Teams (
 # Players table
 cur.execute("""
 CREATE TABLE IF NOT EXISTS Players (
-    player_id     INTEGER PRIMARY KEY,
-    player_name   TEXT NOT NULL,
-    team_id       INTEGER NOT NULL,
-    position      TEXT NOT NULL,
-    fantasy_price REAL NOT NULL,
-    FOREIGN KEY (team_id) REFERENCES Teams(team_id)
+    player_id               INTEGER PRIMARY KEY,
+    player_code             TEXT NOT NULL UNIQUE,
+    player_name             TEXT NOT NULL,
+    team_id                 INTEGER NOT NULL,
+    position                TEXT NOT NULL,
+    fantasy_price           REAL NOT NULL,
+    fantasy_price_change    REAL NOT NULL,
+    FOREIGN KEY (team_id)   REFERENCES Teams(team_id)
 );
 """)
 
@@ -47,10 +49,20 @@ CREATE TABLE IF NOT EXISTS Boxscore (
     player_id      INTEGER NOT NULL,
     minutes_played REAL NOT NULL,
     pts            INTEGER NOT NULL,
-    reb            INTEGER NOT NULL,
+    twofg_made       INTEGER NOT NULL,
+    twofg_taken      INTEGER NOT NULL,
+    threefg_made       INTEGER NOT NULL,
+    threefg_taken      INTEGER NOT NULL,
+    ft_made        INTEGER NOT NULL,
+    ft_taken       INTEGER NOT NULL,
+    oreb           INTEGER NOT NULL,
+    dreb           INTEGER NOT NULL,
     ast            INTEGER NOT NULL,
     stl            INTEGER NOT NULL,
-    blk            INTEGER NOT NULL,
+    fv_blk         INTEGER NOT NULL,
+    ag_blk         INTEGER NOT NULL,
+    fouls_cm       INTEGER NOT NULL,
+    fouls_rv       INTEGER NOT NULL,
     eff            INTEGER NOT NULL,
     PRIMARY KEY (game_id, player_id),
     FOREIGN KEY (game_id) REFERENCES Games(game_id),
